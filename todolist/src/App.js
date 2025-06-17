@@ -2,8 +2,9 @@ import logo from './logo.svg';
 import './App.css';
 import ToDoList from './components/ToDoList';
 import Input from './components/Input';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import TableToDo from './components/TableToDo';
+import { Counter } from './features/counter/counter';
 
 function App() {
 
@@ -11,6 +12,7 @@ function App() {
   const [list, setList] = useState([])
   const [editElement, setEditElement] = useState({ isEdit: false, currentIndex: null })
   const [buttonText, setButtonText] = useState("Add Item")
+  const [selectedList, setSelectedList] = useState([])
 
   const ListStyle = {
     margin: "100px",
@@ -62,14 +64,36 @@ function App() {
     setButtonText("Update")
   }
 
+  const handleCheck = (e) => {
+    let index = parseInt(e.target.value)
+    if (e.target.checked) {
+      setSelectedList([...selectedList, index])
+    }
+    else {
+      setSelectedList((prev) => prev.filter(i => i != index))
+    }
+
+  }
+
+  const handleDeleteAll = () => {
+    let arr = list.filter((ele, ind) => !selectedList.includes(ind))
+    setList([...arr])
+    setSelectedList([])
+  }
+
+
+  useEffect(() => {
+    console.log("selected list", selectedList)
+  }, [selectedList])
+
 
   return (
     <div className="App" style={ListStyle}>
       <div>Add your favourite items to list or table</div>
-      <Input handleInput={handleInput} input={input} handleSubmit={handleSubmit} handleEntered={handleEntered} buttonText={buttonText} />
-      <div>{list.length ? <ToDoList list={list} handleDelete={handleDelete} handleEdit={handleEdit} /> : <div>"No Item Added to the List"</div>}</div>
-      <div >{list.length ? <TableToDo list={list} handleDelete={handleDelete} handleEdit={handleEdit} /> : <div>"No Item Added to the List"</div>}</div>
-
+      {/* <Input handleInput={handleInput} input={input} handleSubmit={handleSubmit} handleEntered={handleEntered} buttonText={buttonText} handleCheck={handleCheck} handleDeleteAll={handleDeleteAll} /> */}
+      {/* <div>{list.length ? <ToDoList list={list} handleDelete={handleDelete} handleEdit={handleEdit} handleCheck={handleCheck} /> : <div>"No Item Added to the List"</div>}</div> */}
+      {/* <div >{list.length ? <TableToDo list={list} handleDelete={handleDelete} handleEdit={handleEdit} handleCheck={handleCheck} selectedList={selectedList}/> : <div>"No Item Added to the List"</div>}</div> */}
+      <Counter />
     </div>
   );
 }
