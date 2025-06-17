@@ -1,4 +1,4 @@
-const TableToDo = ({ list, handleDelete, handleEdit }) => {
+const TableToDo = ({ list, handleDelete, handleEdit, handleCheck, selectedList }) => {
     const tableStyle = {
         border: "1px solid",
         borderCollapse: "collapse",
@@ -6,7 +6,8 @@ const TableToDo = ({ list, handleDelete, handleEdit }) => {
     }
     const tableRowStyle = {
         border: "1px solid",
-        padding: "5px"
+        padding: "5px",
+        position: "relative"
     }
 
     return (
@@ -21,10 +22,14 @@ const TableToDo = ({ list, handleDelete, handleEdit }) => {
             <tbody>
                 {list.map((ele, id) => {
                     return <tr key={id} style={tableRowStyle}>
+                        <td style={tableRowStyle}><input type="checkbox" onClick={(e) => handleCheck(e)
+                        } value={id}
+                            checked={selectedList.includes(id)}
+                        /></td>
                         <td style={tableRowStyle}>{id + 1}</td>
                         <td style={tableRowStyle}>{ele}</td>
                         <td style={tableRowStyle}><button onClick={() => handleEdit(id, true)}>Edit</button></td>
-                        <td><button onClick={() => handleDelete(id)}>Delete</button></td></tr>
+                        <td style={tableRowStyle}><button onClick={() => handleDelete(id)}>Delete</button></td></tr>
                 })}
             </tbody>
         </table >
